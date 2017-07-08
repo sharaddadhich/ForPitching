@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "526831925648",
+    "firebase_url": "https://sgchat-36140.firebaseio.com",
+    "project_id": "sgchat-36140",
+    "storage_bucket": "sgchat-36140.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:526831925648:android:4917ea689a8bed97",
+        "android_client_info": {
+          "package_name": "com.example.manoj.forpitching"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "526831925648-sefgipjsip4pqmtib54vhut5koelt1m5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCnDK1j9FoY6-k1EdIX-k1GdeaxEZusF5A"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
