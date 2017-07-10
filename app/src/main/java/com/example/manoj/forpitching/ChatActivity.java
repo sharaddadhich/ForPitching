@@ -3,6 +3,7 @@ package com.example.manoj.forpitching;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -29,6 +30,7 @@ import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ui.User;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthProvider;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -36,6 +38,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -161,10 +164,6 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onClick: "+" Image import started");
-//                Intent imagegallery = new Intent(Intent.ACTION_GET_CONTENT);
-//                imagegallery.setType("image/jpeg");
-//                imagegallery.putExtra(Intent.EXTRA_LOCAL_ONLY,true);
-//                startActivityForResult(Intent.createChooser(imagegallery,"Complete Action Using"),RC_PHOTO_PICKER);
                 Intent intent = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 intent.setType("image/*");
                 //intent.setAction(Intent.ACTION_PICK);
@@ -351,6 +350,7 @@ public class ChatActivity extends AppCompatActivity {
         }
         else if(requestCode==RC_PHOTO_PICKER  && resultCode==-1)
         {
+
             Log.d(TAG, "onActivityResult: Image selected");
             Uri selectedImageUri = data.getData();
             Log.d(TAG, "onActivityResult: "+selectedImageUri.toString());
@@ -360,13 +360,15 @@ public class ChatActivity extends AppCompatActivity {
                     this, new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
                             Uri downloaduri = taskSnapshot.getDownloadUrl();
                             Messages message = new Messages(null,musername,downloaduri.toString());
                             databaseReference.push().setValue(message);
-
+                         }
                         }
-                    }
-            );
+                );
+
+
         }
     }
 }

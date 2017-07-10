@@ -11,7 +11,6 @@
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity" />
         <activity android:name=".BasicDetailsActivity" />
-        <activity android:name=".PersonalDetailsActivity" />
         <activity android:name=".DisplayMyDetailsActivity" />
         <activity android:name=".ChatActivity">
             <intent-filter>
@@ -21,7 +20,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".FullSizeImageView" />
-        <activity android:name=".AlarmActivity"></activity>
+        <activity android:name=".AlarmActivity" />
+        <activity android:name=".SignUpActivity" />
+        <activity android:name=".LoginActivity"></activity>
     </application>
 
 </manifest>

@@ -16,6 +16,12 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.example.manoj.forpitching.Values.Basic;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.io.FileNotFoundException;
@@ -28,6 +34,13 @@ public class BasicDetailsActivity extends AppCompatActivity {
     String gender;
     Button btnGalleryUpload;
     ImageView profielImage;
+    String PhotoUrl;
+
+    FirebaseDatabase basicFirebaseDatabase;
+    DatabaseReference basicDatabaseReference;
+
+    FirebaseStorage basicFireBaseStorage;
+    StorageReference basicStorageRef;
 
 
 
@@ -35,6 +48,12 @@ public class BasicDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_basic_details);
+
+        basicFirebaseDatabase = FirebaseDatabase.getInstance();
+        basicDatabaseReference = basicFirebaseDatabase.getReference().child("Users");
+
+        basicFireBaseStorage = FirebaseStorage.getInstance();
+        basicStorageRef = basicFireBaseStorage.getReference().child("profile_pics");
 
         profielImage  = (ImageView) findViewById(R.id.iv_profileImage);
         btnGalleryUpload = (Button) findViewById(R.id.btn_UploadFromGallery);
@@ -49,8 +68,9 @@ public class BasicDetailsActivity extends AppCompatActivity {
         btnGalleryUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent importGallery= new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(importGallery,0);
+                Intent intent = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                intent.setType("image/*");
+                startActivityForResult(intent,1);
             }
         });
 
@@ -64,13 +84,18 @@ public class BasicDetailsActivity extends AppCompatActivity {
                 {
                     RadioButton radioButton = (RadioButton) findViewById(genderselected);
                     gender = radioButton.getText().toString();
-                    Bundle basic = new Bundle();
-                    basic.putString("Name",etname.getText().toString());
-                    basic.putString("Gender",gender);
-                    basic.putString("PhoneNo",String.valueOf(etphoneno.getText()));
-                    Intent gotoPersonal = new Intent(BasicDetailsActivity.this,PersonalDetailsActivity.class);
-                    gotoPersonal.putExtra("Basic",basic);
-                    startActivity(gotoPersonal);
+                    String Name = etname.getText().toString();
+                    String PhoneNo = etphoneno.getText().toString();
+
+                    Basic user = new Basic(Name,PhoneNo,gender,PhotoUrl);
+
+                    basicDatabaseReference.push().setValue(user);
+
+                    Intent gotoChatActivity = new Intent(BasicDetailsActivity.this,
+                            ChatActivity.class);
+
+                    startActivity(gotoChatActivity);
+
 
                 }
                 else
@@ -86,19 +111,22 @@ public class BasicDetailsActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == RESULT_OK)
+        if(requestCode == 1)
         {
             Uri TargetUri = data.getData();
-            Bitmap bitmap;
-            try {
-                bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(TargetUri));
-                profielImage.setImageBitmap(bitmap);
-                Picasso.with(BasicDetailsActivity.this).load(TargetUri).into(profielImage);
+            Picasso.with(BasicDetailsActivity.this).load(TargetUri).into(profielImage);
+            StorageReference stref = basicStorageRef.child(etname.getText().toString());
 
-            } catch (FileNotFoundException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+            stref.putFile(TargetUri).addOnSuccessListener(
+                    this, new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            Toast.makeText(BasicDetailsActivity.this, "Profile Photo Uploaded", Toast.LENGTH_SHORT).show();
+                            PhotoUrl = taskSnapshot.getDownloadUrl().toString();
+                        }
+
+                    }
+            );
         }
     }
 }

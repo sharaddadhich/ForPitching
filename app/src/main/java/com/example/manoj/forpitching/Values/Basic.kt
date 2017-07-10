@@ -9,6 +9,7 @@ import android.provider.ContactsContract
 
 data class Basic(
         val Name : String,
-        val PhoneNO: Int,
-        val Gender : String
+        val PhoneNO: String,
+        val Gender : String,
+        val ProfilePhotoUrl : String
 )

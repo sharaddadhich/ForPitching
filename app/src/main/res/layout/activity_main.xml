@@ -24,27 +24,30 @@
         android:layout_height="300dp"
         android:src="@drawable/sg"
         android:layout_gravity="center"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="40sp"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="24sp"
-        android:text="Please Sign Up to Continue"
-        android:gravity="center" />
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="10sp"/>
 
 
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="40dp" />
+
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Click here To Sign Up"
-        android:id="@+id/btn_SignUp"/>
+        android:text="Click here To Login"
+        android:id="@+id/btn_MainActivityLogin"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_NewUser"
+        android:text="New User? SignUp"
+        android:gravity="center"
+        android:textColor="@android:color/holo_blue_dark"/>
 
 
 </LinearLayout>
