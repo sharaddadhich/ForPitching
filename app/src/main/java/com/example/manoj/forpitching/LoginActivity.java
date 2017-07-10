@@ -75,8 +75,10 @@ public class LoginActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful())
                 {
-                    //user is sucessfully registerd
+                    //user is sucessfully logged in
+                    Intent gotochatactivity = new Intent(LoginActivity.this,ChatActivity.class);
 
+                    startActivity(gotochatactivity);
                 }
             }
         });

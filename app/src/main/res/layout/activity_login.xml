@@ -10,7 +10,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Enter the Details to SignUp"
+        android:text="Enter the Details to LogIn"
         android:textSize="25sp"
         android:gravity="center"
         android:textColor="@color/colorPrimary"/>

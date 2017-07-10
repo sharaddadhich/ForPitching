@@ -25,4 +25,5 @@ public class FullSizeImageView extends AppCompatActivity {
         tvUsername.setText(data.getString("Username"));
         Picasso.with(this).load(data.getString("Url")).into(ivFullSize);
     }
+
 }

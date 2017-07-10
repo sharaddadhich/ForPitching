@@ -83,8 +83,13 @@ public class ChatActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.sign_out_menu:
-                AuthUI.getInstance().signOut(this);
-                return true;
+                firebaseAuth.signOut();
+                finish();
+                Intent x = new Intent(ChatActivity.this,LoginActivity.class);
+                startActivity(x);
+            case R.id.user_dispaly_menu:
+                Intent gotousers = new Intent(ChatActivity.this,UsersDisplayActivity.class);
+                startActivity(gotousers);
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -223,21 +228,21 @@ public class ChatActivity extends AppCompatActivity {
                    // Toast.makeText(ChatActivity.this, "Successful in Logging In", Toast.LENGTH_SHORT).show();
 
                 }
-                else
-                {
-                    //user is signed out
-
-                    onsignedout();
-                    startActivityForResult(
-                            AuthUI.getInstance()
-                                    .createSignInIntentBuilder()
-                                    .setAvailableProviders(
-                                            Arrays.asList(new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
-
-                                                    new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
-                                    .build(),
-                            RC_SIGN_IN);
-                }
+//                else
+//                {
+//                    //user is signed out
+//
+//                    onsignedout();
+//                    startActivityForResult(
+//                            AuthUI.getInstance()
+//                                    .createSignInIntentBuilder()
+//                                    .setAvailableProviders(
+//                                            Arrays.asList(new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
+//
+//                                                    new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
+//                                    .build(),
+//                            RC_SIGN_IN);
+//                }
             }
         };
 
