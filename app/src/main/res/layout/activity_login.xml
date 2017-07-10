@@ -10,7 +10,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Enter the Details to LogIn"
+        android:text="Enter the Details to Login"
         android:textSize="25sp"
         android:gravity="center"
         android:textColor="@color/colorPrimary"/>
@@ -33,7 +33,17 @@
         android:inputType="textPassword"
         android:id="@+id/et_LoginPassword"
         android:layout_gravity="center"
-        android:hint="Password"/>
+        android:hint="Password"
+        android:layout_marginBottom="0dp"/>
+
+    <TextView
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_ForgotPassword"
+        android:text="Forgot Password?"
+        android:textColor="@android:color/holo_blue_dark"
+        android:gravity="end"
+        android:layout_gravity="start"/>
 
     <Button
         android:layout_width="200dp"

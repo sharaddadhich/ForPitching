@@ -23,7 +23,7 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     Button btnLogin;
     EditText etemaillogin,etpasslogin;
-    TextView tvSignupmessage;
+    TextView tvSignupmessage,tvForgotPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +35,21 @@ public class LoginActivity extends AppCompatActivity {
         etemaillogin = (EditText) findViewById(R.id.et_LoginEmail);
         etpasslogin = (EditText) findViewById(R.id.et_LoginPassword);
         tvSignupmessage = (TextView) findViewById(R.id.tv_newUserSignupinLogin);
+        tvForgotPassword = (TextView) findViewById(R.id.tv_ForgotPassword);
+
+        tvForgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String email = etemaillogin.getText().toString().trim();
+                if(email!=null) {
+                    firebaseAuth.sendPasswordResetEmail(etemaillogin.getText().toString());
+                    Toast.makeText(LoginActivity.this, "We have sent an Reset mail at the provided email id", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Toast.makeText(LoginActivity.this, "Please Provide an Email", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         tvSignupmessage.setOnClickListener(new View.OnClickListener() {
             @Override

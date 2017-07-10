@@ -104,7 +104,7 @@ public class ChatActivity extends AppCompatActivity {
         firebaseDatabase = FirebaseDatabase.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
         mfirebasestorgae = FirebaseStorage.getInstance();
-
+        musername = "Sharad";
         databaseReference = firebaseDatabase.getReference().child("messages");
         storagereferencesg =mfirebasestorgae.getReference().child("chat_storage");
 
@@ -308,7 +308,7 @@ public class ChatActivity extends AppCompatActivity {
                     int pos = newmsgs.size();
                     Log.d(TAG, "onChildAdded: Size of Array List" + pos);
                     Messages xyz = newmsgs.get(pos - 1);
-                    Log.d(TAG, "onChildAdded: in aArray List " + xyz.getName() + " " + xyz.getText());
+                    Log.d("12ka4hotahai", "onChildAdded: in aArray List " + xyz.getName() + " " + xyz.getText());
                     chatInflaterRecycleViewAdapter.updatelist(newmsgs);
 
 

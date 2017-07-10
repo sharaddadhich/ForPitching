@@ -14,6 +14,12 @@ public class FullSizeImageView extends AppCompatActivity {
     ImageView ivFullSize;
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.full_size_photo);
@@ -24,6 +30,8 @@ public class FullSizeImageView extends AppCompatActivity {
         Bundle data = getIntent().getBundleExtra("Data");
         tvUsername.setText(data.getString("Username"));
         Picasso.with(this).load(data.getString("Url")).into(ivFullSize);
+
+
     }
 
 }

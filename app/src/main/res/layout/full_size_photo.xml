@@ -12,13 +12,16 @@
         android:background="@android:color/darker_gray"
         android:textColor="@android:color/white"
         />
-
     <Space
         android:layout_width="match_parent"
-        android:layout_height="50dp" />
+        android:layout_height="30dp" />
+
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="440dp"
         android:id="@+id/iv_fullsize"
         android:layout_gravity="center"/>
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="20dp" />
 </LinearLayout>
