@@ -27,20 +27,27 @@ import java.util.ArrayList;
  */
 
 public class ChatInflaterRecycleViewAdapter extends RecyclerView.Adapter<ChatInflaterRecycleViewAdapter.ChatViewHolder> {
-public static final String TAG = "Chat Adapter";
+public static final String TAG = "ChatAdapter";
     //ArrayList<MessagesRecieved> messagesss;
     ArrayList<Messages> messagesss;
     Context context;
     Dialerinterfaece dialerInterface;
+    FullSizeInterface fullSizeInterface;
+
+    public interface FullSizeInterface{
+        void ViewforfullsizeClicked(String Url,String Username);
+    }
 
     public interface Dialerinterfaece{
         void dialerrequestsent(String no);
     }
 
-    public ChatInflaterRecycleViewAdapter(ArrayList<Messages> messagesss, Context context,Dialerinterfaece dialerInterface) {
+    public ChatInflaterRecycleViewAdapter(ArrayList<Messages> messagesss, Context context,
+                                          Dialerinterfaece dialerInterface,FullSizeInterface fullSizeInterface) {
         this.messagesss = messagesss;
         this.context = context;
         this.dialerInterface = dialerInterface;
+        this.fullSizeInterface = fullSizeInterface;
     }
 
     public void updatelist(ArrayList<Messages> mgs)
@@ -49,19 +56,23 @@ public static final String TAG = "Chat Adapter";
         notifyDataSetChanged();
     }
 
+
+
     @Override
     public int getItemViewType(int position) {
         Messages thismessage = messagesss.get(position);
+       // Log.d("inthis", "getItemViewType:   reached in function");
         if(thismessage.getPhotoUrl()==null) {
             String msg = thismessage.getText();
+         //   Log.d("UP", "getItemViewType:  " + msg);
             int flag = 0;
             String[] words = msg.split(" ");
             if (words.length == 1) {
-                Log.d("false", "getItemViewType: "+words.length);
+              //  Log.d("false", "getItemViewType: "+words.length);
                 try {
-                    Log.d("sharad", "getItemViewType:  in the tary statement");
-                    int a = Integer.parseInt(words.toString());
-                    Log.d("true", "getItemViewType:  Sucessful");
+                 //   Log.d("sharad", "getItemViewType:  in the try statement");
+                    int a = Integer.parseInt(words[0].toString());
+
                     flag=2;
                 } catch (RuntimeException d) {
                     //TODO : it is a text so we need to go for the else part from here
@@ -76,9 +87,11 @@ public static final String TAG = "Chat Adapter";
                     //  Toast.makeText(context, ss, Toast.LENGTH_SHORT).show();
 
                     int x = ss.length();
+                    char a;
                     if (x == 3) {
                         Log.d(TAG, "getItemViewType: ");
-                        char a = ss.charAt(1);
+
+                        a = ss.charAt(1);
                         if (a == 'p' || a == 'a') {
                             char b = ss.charAt(2);
                             if (b == 'm') {
@@ -94,7 +107,7 @@ public static final String TAG = "Chat Adapter";
 //                        return 0;
 //                    }
                     } else if (x == 4) {
-                        char a = ss.charAt(2);
+                        a = ss.charAt(2);
                         if (a == 'p' || a == 'a') {
                             char b = ss.charAt(3);
                             if (b == 'm') {
@@ -159,11 +172,11 @@ public static final String TAG = "Chat Adapter";
         }
         View rootView = li.inflate(layouttype,parent,false);
 
-        return new ChatViewHolder(rootView);
+        return new ChatViewHolder(rootView,viewType);
     }
 
     @Override
-    public void onBindViewHolder(ChatViewHolder holder, int position) {
+    public void onBindViewHolder(final ChatViewHolder holder, final int position) {
         //MessagesRecieved thisMessage = messagesss.get(position);
         final Messages thisMessage = messagesss.get(position);
         Log.d(TAG, "onBindViewHolder: " + thisMessage.getName());
@@ -174,24 +187,51 @@ public static final String TAG = "Chat Adapter";
             holder.tvusername.setText(thisMessage.getName());
             holder.tvmsg.setText(thisMessage.getText());
             Log.d(TAG, "onBindViewHolder: before calling");
-            int viewtype = getItemViewType(position);
-            Log.d(TAG, "onBindViewHolder: After calling "+viewtype);
-            if(viewtype==1) {
-                Log.d("1024", "onBindViewHolder: " + "1st viewtype");
+
+//            holder.thisView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    int viewType = getItemViewType(position);
+//                    Log.d("after viewtype", "onClick: "+viewType);
+//                    if(viewType==1)
+//                    {
+//
+//                    }
+//                    else if(viewType==3)
+//                    {
+//                        String phoneNo = "tel:"+thisMessage.getText();
+//                        dialerInterface.dialerrequestsent(phoneNo);
+//                    }
+//                }
+//            });
+//            int viewtype = getItemViewType(position);
+//            Log.d("Sharad", "onBindViewHolder: After calling "+viewtype);
+            if(holder.viewType==2) {
+               Log.d("1024", "onBindViewHolder: " + "1st viewtype");
                 holder.btnAccept.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        Log.d("Add Alarm", "onClick: ");
                         Toast.makeText(context, "Alarm Created", Toast.LENGTH_SHORT).show();
                     }
                 });
+                holder.btnReject.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //set visiblity gone here
+                        holder.btnAccept.setVisibility(View.GONE);
+                        holder.btnReject.setVisibility(View.GONE);
+                    }
+                });
             }
-            else if(viewtype ==3)
+            else if(holder.viewType ==3)
             {
                 Log.d("3024", "onBindViewHolder: 3nd View Type");
                 holder.thisView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String phoneNo = "Tel:"+thisMessage.getText();
+                        Log.d("sharad", "onClick: ");
+                        String phoneNo = "tel:"+thisMessage.getText();
                         //Intent gotoDialer = new Intent(Intent.ACTION_VIEW,  Uri.parse(phoneNo));
                         dialerInterface.dialerrequestsent(phoneNo);
                     }
@@ -202,6 +242,12 @@ public static final String TAG = "Chat Adapter";
         {
             holder.tvusername.setText(thisMessage.getName());
             Picasso.with(context).load(thisMessage.getPhotoUrl()).into(holder.ivsent);
+            holder.thisView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    fullSizeInterface.ViewforfullsizeClicked(thisMessage.getPhotoUrl(),thisMessage.getName());
+                }
+            });
         }
 
 
@@ -219,7 +265,10 @@ public static final String TAG = "Chat Adapter";
         Button btnAccept,btnReject;
         ImageView ivsent;
         View thisView;
-        public ChatViewHolder(View itemView) {
+        int viewType;
+
+
+        public ChatViewHolder(View itemView,int Type) {
             super(itemView);
             tvusername = (TextView) itemView.findViewById(R.id.tv_from);
             tvmsg = (TextView) itemView.findViewById(R.id.tv_message);
@@ -227,6 +276,7 @@ public static final String TAG = "Chat Adapter";
             btnAccept = (Button) itemView.findViewById(R.id.btn_alarm_yes);
             btnReject = (Button) itemView.findViewById(R.id.btn_alarm_no);
             thisView = itemView;
+            viewType = Type;
         }
     }
 

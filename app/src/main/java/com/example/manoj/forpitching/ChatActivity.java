@@ -100,12 +100,28 @@ public class ChatActivity extends AppCompatActivity {
         imageFromGallery = (ImageButton) findViewById(R.id.ib_importfromgallery);
         usermessage = (EditText) findViewById(R.id.et_message);
         Send = (Button) findViewById(R.id.btn_SendMessage);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setStackFromEnd(true);
+        recyclerView.setLayoutManager(linearLayoutManager);
+
         chatInflaterRecycleViewAdapter = new ChatInflaterRecycleViewAdapter(msgs, this, new ChatInflaterRecycleViewAdapter.Dialerinterfaece() {
             @Override
             public void dialerrequestsent(String no) {
-                Intent gotoDialer = new Intent(Intent.ACTION_VIEW,Uri.parse(no));
+                Intent gotoDialer = new Intent(Intent.ACTION_VIEW, Uri.parse(no));
                 startActivity(gotoDialer);
+            }
+        }
+                , new ChatInflaterRecycleViewAdapter.FullSizeInterface() {
+            @Override
+            public void ViewforfullsizeClicked(String Url,String Username) {
+                Intent fullsizeintent = new Intent(ChatActivity.this,FullSizeImageView.class);
+                Bundle data = new Bundle();
+                data.putString("Username",Username);
+                data.putString("Url",Url);
+
+                fullsizeintent.putExtra("Data",data);
+
+                startActivity(fullsizeintent);
             }
         });
         recyclerView.setAdapter(chatInflaterRecycleViewAdapter);
@@ -174,7 +190,7 @@ public class ChatActivity extends AppCompatActivity {
                     //user is signed in
                     onsignedInInitialize(user.getDisplayName());
 
-                    Toast.makeText(ChatActivity.this, "Successful in Logging In", Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(ChatActivity.this, "Successful in Logging In", Toast.LENGTH_SHORT).show();
 
                 }
                 else
