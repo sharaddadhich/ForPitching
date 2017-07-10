@@ -33,6 +33,11 @@ public static final String TAG = "ChatAdapter";
     Context context;
     Dialerinterfaece dialerInterface;
     FullSizeInterface fullSizeInterface;
+    BtnAcceptInterface btnAcceptInterface;
+
+    public interface BtnAcceptInterface{
+        void onbtnclicked(String Time,String Username);
+    }
 
     public interface FullSizeInterface{
         void ViewforfullsizeClicked(String Url,String Username);
@@ -43,11 +48,13 @@ public static final String TAG = "ChatAdapter";
     }
 
     public ChatInflaterRecycleViewAdapter(ArrayList<Messages> messagesss, Context context,
-                                          Dialerinterfaece dialerInterface,FullSizeInterface fullSizeInterface) {
+                                          Dialerinterfaece dialerInterface,FullSizeInterface fullSizeInterface,
+                                          BtnAcceptInterface btnAcceptInterface) {
         this.messagesss = messagesss;
         this.context = context;
         this.dialerInterface = dialerInterface;
         this.fullSizeInterface = fullSizeInterface;
+        this.btnAcceptInterface = btnAcceptInterface;
     }
 
     public void updatelist(ArrayList<Messages> mgs)
@@ -187,32 +194,81 @@ public static final String TAG = "ChatAdapter";
             holder.tvusername.setText(thisMessage.getName());
             holder.tvmsg.setText(thisMessage.getText());
             Log.d(TAG, "onBindViewHolder: before calling");
-
-//            holder.thisView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    int viewType = getItemViewType(position);
-//                    Log.d("after viewtype", "onClick: "+viewType);
-//                    if(viewType==1)
-//                    {
-//
-//                    }
-//                    else if(viewType==3)
-//                    {
-//                        String phoneNo = "tel:"+thisMessage.getText();
-//                        dialerInterface.dialerrequestsent(phoneNo);
-//                    }
-//                }
-//            });
-//            int viewtype = getItemViewType(position);
-//            Log.d("Sharad", "onBindViewHolder: After calling "+viewtype);
             if(holder.viewType==2) {
-               Log.d("1024", "onBindViewHolder: " + "1st viewtype");
                 holder.btnAccept.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.d("Add Alarm", "onClick: ");
                         Toast.makeText(context, "Alarm Created", Toast.LENGTH_SHORT).show();
+                        String time = null;
+                        String[] wo = thisMessage.getText().split(" ");
+                        for (String ss:wo)
+                        {
+                            int x = ss.length();
+                            char a;
+                            if (x == 3) {
+                                Log.d(TAG, "getItemViewType: ");
+
+                                a = ss.charAt(1);
+                                if (a == 'p' || a == 'a') {
+                                    char b = ss.charAt(2);
+                                    if (b == 'm') {
+                                        if(a=='p')
+                                        {
+                                            int t = 12+ Integer.parseInt(ss.substring(0,1));
+                                            time = String.valueOf(t);
+                                        }
+                                        else
+                                        {
+                                            time = ss.substring(0,1);
+                                        }
+                                    }
+//                        else
+//                        {
+//                            return 0;
+//                        }
+                                }
+//                    else
+//                    {
+//                        return 0;
+//                    }
+                            } else if (x == 4) {
+                                a = ss.charAt(2);
+                                if (a == 'p' || a == 'a') {
+                                    char b = ss.charAt(3);
+                                    if (b == 'm') {
+                                        if(a=='p')
+                                        {
+                                            int t = 12+ Integer.parseInt(ss.substring(0,2));
+                                            time = String.valueOf(t);
+                                        }
+                                        else
+                                        {
+                                            time = ss.substring(0,2);
+                                        }
+
+
+                                    }
+//                        else
+//                        {
+//                            return 0;
+//                        }
+                                }
+                                ///  else{
+                                //   continue;
+                                //}
+//                    else
+//                    {
+//                        return 0;
+//                    }
+                            }
+                        }
+
+                        Log.d("1024", "onClick: "+ time);
+                        btnAcceptInterface.onbtnclicked(time , thisMessage.getName());
+                        holder.btnReject.setVisibility(View.GONE);
+                        holder.btnAccept.setVisibility(View.GONE);
+
+
                     }
                 });
                 holder.btnReject.setOnClickListener(new View.OnClickListener() {
@@ -232,7 +288,6 @@ public static final String TAG = "ChatAdapter";
                     public void onClick(View v) {
                         Log.d("sharad", "onClick: ");
                         String phoneNo = "tel:"+thisMessage.getText();
-                        //Intent gotoDialer = new Intent(Intent.ACTION_VIEW,  Uri.parse(phoneNo));
                         dialerInterface.dialerrequestsent(phoneNo);
                     }
                 });

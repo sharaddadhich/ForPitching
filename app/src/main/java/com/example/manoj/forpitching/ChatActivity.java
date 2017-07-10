@@ -1,6 +1,8 @@
 package com.example.manoj.forpitching;
 
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -24,6 +26,7 @@ import com.example.manoj.forpitching.Adapters.ChatInflaterRecycleViewAdapter;
 import com.example.manoj.forpitching.Values.Messages;
 import com.example.manoj.forpitching.Values.MessagesRecieved;
 import com.firebase.ui.auth.AuthUI;
+import com.firebase.ui.auth.ui.User;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -38,6 +41,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -113,17 +117,44 @@ public class ChatActivity extends AppCompatActivity {
         }
                 , new ChatInflaterRecycleViewAdapter.FullSizeInterface() {
             @Override
-            public void ViewforfullsizeClicked(String Url,String Username) {
-                Intent fullsizeintent = new Intent(ChatActivity.this,FullSizeImageView.class);
+            public void ViewforfullsizeClicked(String Url, String Username) {
+                Intent fullsizeintent = new Intent(ChatActivity.this, FullSizeImageView.class);
                 Bundle data = new Bundle();
-                data.putString("Username",Username);
-                data.putString("Url",Url);
+                data.putString("Username", Username);
+                data.putString("Url", Url);
 
-                fullsizeintent.putExtra("Data",data);
+                fullsizeintent.putExtra("Data", data);
 
                 startActivity(fullsizeintent);
             }
-        });
+        },
+                new ChatInflaterRecycleViewAdapter.BtnAcceptInterface() {
+                    @Override
+                    public void onbtnclicked(String Time, String Username) {
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(Time));
+                        calendar.set(Calendar.MINUTE,0);
+                        calendar.set(Calendar.SECOND,0);
+
+                        AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
+                        Intent i = new Intent(ChatActivity.this,AlarmActivity.class);
+                        Bundle details = new Bundle();
+                        details.putString("Username", Username);
+                        details.putString("Time",Time);
+                        i.putExtra("Details",details);
+                        PendingIntent pi = PendingIntent.getActivity(ChatActivity.this,
+                                123,
+                                i,
+                                PendingIntent.FLAG_UPDATE_CURRENT
+                        );
+                        am.set(
+                                AlarmManager.RTC_WAKEUP,
+                                calendar.getTimeInMillis(),
+                                pi
+                                );
+                    }
+
+                });
         recyclerView.setAdapter(chatInflaterRecycleViewAdapter);
 
         imageFromGallery.setOnClickListener(new View.OnClickListener() {

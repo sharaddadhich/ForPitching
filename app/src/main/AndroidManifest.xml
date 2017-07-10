@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".MainActivity" />
         <activity android:name=".BasicDetailsActivity" />
         <activity android:name=".PersonalDetailsActivity" />
         <activity android:name=".DisplayMyDetailsActivity" />
@@ -20,7 +20,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".FullSizeImageView"></activity>
+        <activity android:name=".FullSizeImageView" />
+        <activity android:name=".AlarmActivity"></activity>
     </application>
 
 </manifest>
